@@ -44,6 +44,6 @@ public class PandaController : MonoBehaviour {
     {
         jumpPress = true;
         if (inAir) return;
-        this.GetComponent<Rigidbody2D>().AddForce(Vector2.up * 3000);
+        this.GetComponent<Rigidbody2D>().AddForce(Vector2.up * 2900);
     }
 }
