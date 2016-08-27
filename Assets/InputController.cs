@@ -34,7 +34,10 @@ public class InputController : MonoBehaviour {
 
     void handleInteraction(bool starting)
     {
-        if (starting)  _player.jump();
+        if (starting)
+        {
+            _player.jump();
+        }
         else _player.jumpPress = false;
     }
 }

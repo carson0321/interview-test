@@ -21,7 +21,8 @@ public class PandaController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         moveAnimation();
-        gameObject.transform.position += new Vector3(speed, 0, 0);
+        //gameObject.transform.position += new Vector3(speed, 0, 0);
+
         if (!inAir && Mathf.Abs(this.GetComponent<Rigidbody2D>().velocity.y) > 0.05f)  inAir = true;
         else if (inAir && this.GetComponent<Rigidbody2D>().velocity.y == 0.00f)
         {
