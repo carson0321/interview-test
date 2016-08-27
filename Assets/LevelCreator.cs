@@ -40,7 +40,7 @@ public class LevelCreator : MonoBehaviour {
         gameLayer = GameObject.Find("gameLayer");
         collectedTiles = GameObject.Find("tmp");
 
-        for (int i = 0; i < 10; i++) setGameObject("Road");
+        for (int i = 0; i < 30; i++) setGameObject("Road");
          
 
         for (int i = 0; i < 10; i++)
@@ -163,7 +163,7 @@ public class LevelCreator : MonoBehaviour {
                 }
             }
         }
-        if (gameLayer.transform.childCount < 20)
+        if (gameLayer.transform.childCount < 30)
             fillScene();
         if (roadCounter > 0)
         {
@@ -188,41 +188,46 @@ public class LevelCreator : MonoBehaviour {
 
     private void setTile(string type)
     {
+        int treeDistance = (int)Random.Range(1, 8);
         switch (type)
         {
             case "Road":
                 roadCounter++;
-                tileRoadPos = set("tmpRoad",tileRoadPos, startUpRoadPosY);
+                tileRoadPos = set("tmpRoad",tileRoadPos, startUpRoadPosY,0);
                 break;
             case "Tree1":
-                tileTree1Pos = set("tmpTree1", tileTree1Pos, startUpTree1PosY);
+                tileTree1Pos = set("tmpTree1", tileTree1Pos, startUpTree1PosY, treeDistance);
                 break;
             case "Tree2":
-                tileTree2Pos = set("tmpTree2", tileTree2Pos, startUpTree2PosY);
+                tileTree2Pos = set("tmpTree2", tileTree2Pos, startUpTree2PosY, treeDistance);
                 break;
             case "Cloud1":
-                tileCloud1Pos = set("tmpCloud1", tileCloud1Pos, startUpCloud1PosY);
+                int cloud1Distance = (int)Random.Range(1, 8);
+                tileCloud1Pos = set("tmpCloud1", tileCloud1Pos, startUpCloud1PosY, cloud1Distance);
                 break;
             case "Cloud2":
-                tileCloud2Pos = set("tmpCloud2", tileCloud2Pos, startUpCloud2PosY);
+                int cloud2Distance = (int)Random.Range(1, 8);
+                tileCloud2Pos = set("tmpCloud2", tileCloud2Pos, startUpCloud2PosY, cloud2Distance);
                 break;
             case "Grass1":
-                tileGrass1Pos = set("tmpGrass1", tileGrass1Pos, startUpGrass1PosY);
+                int grass1Distance = (int)Random.Range(1, 8);
+                tileGrass1Pos = set("tmpGrass1", tileGrass1Pos, startUpGrass1PosY, grass1Distance);
                 break;
             case "Grass2":
-                tileGrass2Pos = set("tmpGrass2", tileGrass2Pos, startUpGrass2PosY);
+                int grass2Distance = (int)Random.Range(1, 8);
+                tileGrass2Pos = set("tmpGrass2", tileGrass2Pos, startUpGrass2PosY, grass2Distance);
                 break;
             case "TreeShadow":
-                tileTreeShadowPos = set("tmpTreeShadow", tileTreeShadowPos, startUpTreeShadowPosY);
+                tileTreeShadowPos = set("tmpTreeShadow", tileTreeShadowPos, startUpTreeShadowPosY, treeDistance);
                 break;
         }
     }
 
-    private GameObject set(string type,GameObject gameObjectType, float PosYType)
+    private GameObject set(string type,GameObject gameObjectType, float PosYType,int distance)
     {
         tmpTile = collectedTiles.transform.FindChild(type).transform.GetChild(0).gameObject;
         tmpTile.transform.parent = gameLayer.transform;
-        tmpTile.transform.position = new Vector3(gameObjectType.transform.position.x + (tileWidth), PosYType, 0);
+        tmpTile.transform.position = new Vector3(gameObjectType.transform.position.x + tileWidth + distance, PosYType, 0);
         return tmpTile;
     }
 
