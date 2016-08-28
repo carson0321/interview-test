@@ -1,12 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class LevelCreator : MonoBehaviour {
+public class LevelCreator : MonoBehaviour
+{
     // Use this for initialization
     private GameObject collectedTiles;
     public GameObject tileRoadPos;
+    private GameObject _player;
     public GameObject tileKillBottomPos;
     public GameObject tileKillTopPos;
+    public GameObject tileScorePos;
     public GameObject tileTree1Pos;
     public GameObject tileTree2Pos;
     public GameObject tileCloud1Pos;
@@ -20,6 +23,7 @@ public class LevelCreator : MonoBehaviour {
     private float startUpRoadPosY;
     private float startUpKillBottomPosY;
     private float startUpKillTopPosY;
+    private float startUpScorePosY;
     private float startUpTree1PosY;
     private float startUpTree2PosY;
     private float startUpCloud1PosY;
@@ -28,13 +32,19 @@ public class LevelCreator : MonoBehaviour {
     private float startUpGrass1PosY;
     private float startUpGrass2PosY;
 
-    public float gameSpeed = 1.0f;
-    private float outofbounceX;
+    private float outOfBounceX;
+    private float outOfPlayBounceY;
     private int roadCounter = 0;
     private bool enemyAdded = false;
-    private bool backgroundAdded = false;
+
     private float time = 0;
-    private int control = 0;
+    private float gameSpeed = 3.5f;
+    private bool playerDead = false;
+
+    void Awake()
+    {
+        Application.targetFrameRate = 60;
+    }
 
     // Use this for initialization
     void Start()
@@ -42,11 +52,12 @@ public class LevelCreator : MonoBehaviour {
         gameLayer = GameObject.Find("gameLayer");
         collectedTiles = GameObject.Find("tmp");
 
-        for (int i = 0; i < 20; i++)
+        for (int i = 0; i < 50; i++)
         {
             setGameObject("Road");
             setGameObject("KillBottom");
             setGameObject("KillTop");
+            setGameObject("Score");
             setGameObject("Tree1");
             setGameObject("Tree2");
             setGameObject("Cloud1");
@@ -60,10 +71,16 @@ public class LevelCreator : MonoBehaviour {
 
         tileRoadPos = GameObject.Find("startRoad");
         startUpRoadPosY = tileRoadPos.transform.position.y;
-        outofbounceX = tileRoadPos.transform.position.x - 10.0f;
+        outOfBounceX = tileRoadPos.transform.position.x - 9.5f;
+        outOfPlayBounceY = startUpRoadPosY - 3.0f;
+
+        _player = GameObject.Find("Panda");
 
         tileKillBottomPos = GameObject.Find("startBottom");
         startUpKillBottomPosY = GameObject.Find("startBottom").transform.position.y;
+
+        tileScorePos = GameObject.Find("startScore");
+        startUpScorePosY = GameObject.Find("startScore").transform.position.y;
 
         tileKillTopPos = GameObject.Find("startTop");
         startUpKillTopPosY = tileKillTopPos.transform.position.y;
@@ -89,77 +106,68 @@ public class LevelCreator : MonoBehaviour {
         tileGrass2Pos = GameObject.Find("startGrass2");
         startUpGrass2PosY = GameObject.Find("startGrass2").transform.position.y;
 
-
-        setTile("Road");
+        fillScene(roadCounter);
         randomizeEnemy();
     }
-	
+
     private void setGameObject(string type)
     {
         GameObject tmpObject = Instantiate(Resources.Load(type, typeof(GameObject))) as GameObject;
-        tmpObject.transform.parent = collectedTiles.transform.FindChild("tmp"+ type).transform;
+        tmpObject.transform.parent = collectedTiles.transform.FindChild("tmp" + type).transform;
         tmpObject.transform.position = Vector2.zero;
     }
 
-	// Update is called once per frame
-	void Update () {
-        time += Time.deltaTime;
-        if (time >= 4)
-        {
-            time = 0;
-            setTile("Road");
-        }
+    // Update is called once per frame
+    void Update()
+    {
     }
-    
+
     void FixedUpdate()
     {
-        gameLayer.transform.position = new Vector2(gameLayer.transform.position.x - (gameSpeed * Time.deltaTime + 0.02f), -1.96f);
+        gameLayer.transform.position = new Vector2(gameLayer.transform.position.x - (gameSpeed * Time.deltaTime ), -1.96f);
 
         foreach (Transform child in gameLayer.transform)
         {
-            if (child.position.x < outofbounceX)
+            if (child.position.x < outOfBounceX)
             {
                 switch (child.gameObject.name)
                 {
                     case "Road(Clone)":
-                        child.gameObject.transform.position = collectedTiles.transform.FindChild("tmpRoad").transform.position;
-                        child.gameObject.transform.parent = collectedTiles.transform.FindChild("tmpRoad").transform;
+                        if (roadCounter < 1) setTmpToScene(child, "Road");
+                        else Destroy(child.gameObject);
                         break;
                     case "KillBottom(Clone)":
-                        child.gameObject.transform.position = collectedTiles.transform.FindChild("tmpKillBottom").transform.position;
-                        child.gameObject.transform.parent = collectedTiles.transform.FindChild("tmpKillBottom").transform;
+                        if (roadCounter < 1) setTmpToScene(child, "KillBottom");
+                        else Destroy(child.gameObject);
                         break;
                     case "KillTop(Clone)":
-                        child.gameObject.transform.position = collectedTiles.transform.FindChild("tmpKillTop").transform.position;
-                        child.gameObject.transform.parent = collectedTiles.transform.FindChild("tmpKillTop").transform;
+                        if (roadCounter < 1) setTmpToScene(child, "KillTop");
+                        else Destroy(child.gameObject);
+                        break;
+                    case "Score(Clone)":
+                        if (roadCounter < 1) setTmpToScene(child, "Score");
+                        else Destroy(child.gameObject);
                         break;
                     case "Tree1(Clone)":
-                        child.gameObject.transform.position = collectedTiles.transform.FindChild("tmpTree1").transform.position;
-                        child.gameObject.transform.parent = collectedTiles.transform.FindChild("tmpTree1").transform;
+                        setTmpToScene(child, "Tree1");
                         break;
                     case "Tree2(Clone)":
-                        child.gameObject.transform.position = collectedTiles.transform.FindChild("tmpTree2").transform.position;
-                        child.gameObject.transform.parent = collectedTiles.transform.FindChild("tmpTree2").transform;
+                        setTmpToScene(child, "Tree2");
                         break;
                     case "Cloud1(Clone)":
-                        child.gameObject.transform.position = collectedTiles.transform.FindChild("tmpCloud1").transform.position;
-                        child.gameObject.transform.parent = collectedTiles.transform.FindChild("tmpCloud1").transform;
+                        setTmpToScene(child, "Cloud1");
                         break;
                     case "Cloud2(Clone)":
-                        child.gameObject.transform.position = collectedTiles.transform.FindChild("tmpCloud2").transform.position;
-                        child.gameObject.transform.parent = collectedTiles.transform.FindChild("tmpCloud2").transform;
+                        setTmpToScene(child, "Cloud2");
                         break;
                     case "Grass1(Clone)":
-                        child.gameObject.transform.position = collectedTiles.transform.FindChild("tmpGrass1").transform.position;
-                        child.gameObject.transform.parent = collectedTiles.transform.FindChild("tmpGrass1").transform;
+                        setTmpToScene(child, "Grass1");
                         break;
                     case "Grass2(Clone)":
-                        child.gameObject.transform.position = collectedTiles.transform.FindChild("tmpGrass2").transform.position;
-                        child.gameObject.transform.parent = collectedTiles.transform.FindChild("tmpGrass2").transform;
+                        setTmpToScene(child, "Grass2");
                         break;
                     case "TreeShadow(Clone)":
-                        child.gameObject.transform.position = collectedTiles.transform.FindChild("tmpTreeShadow").transform.position;
-                        child.gameObject.transform.parent = collectedTiles.transform.FindChild("tmpTreeShadow").transform;
+                        setTmpToScene(child, "TreeShadow");
                         break;
                     default:
                         Destroy(child.gameObject);
@@ -167,53 +175,66 @@ public class LevelCreator : MonoBehaviour {
                 }
             }
         }
-        if (gameLayer.transform.childCount < 20)
-            setTile("Road");
+        if (gameLayer.transform.childCount < 50)
+            fillScene(roadCounter);
         if (roadCounter > 0)
         {
             randomizeEnemy();
-            randomizeBackground();
             enemyAdded = false;
-            backgroundAdded = false;
             roadCounter--;
         }
+        if (_player.transform.position.y < outOfPlayBounceY)
+            killPlayer();
     }
-    
+
+    private void setTmpToScene(Transform tmp,string type)
+    {
+        tmp.gameObject.transform.position = collectedTiles.transform.FindChild("tmp"+ type).transform.position;
+        tmp.gameObject.transform.parent = collectedTiles.transform.FindChild("tmp" + type).transform;
+    }
+
+    private void fillScene(int roadNumber)
+    {
+        if(roadNumber<1) setTile("Road");
+        setTile("Tree1"); setTile("Tree2");
+        setTile("Cloud1"); setTile("Cloud2");
+        setTile("Grass1"); setTile("Grass2");
+        setTile("TreeShadow");
+    }
 
     private void setTile(string type)
     {
-        float treeDistance = Random.Range(1, 8);
         switch (type)
         {
             case "Road":
+                tileRoadPos = setTmp("tmpRoad", tileRoadPos, startUpRoadPosY, 9.5f);
                 roadCounter++;
-                tileRoadPos = set("tmpRoad",tileRoadPos, startUpRoadPosY,10.5f);
                 break;
             case "Tree1":
-                tileTree1Pos = set("tmpTree1", tileRoadPos, startUpTree1PosY, treeDistance);
+                tileTree1Pos = setTmp("tmpTree1", tileTree1Pos, startUpTree1PosY, 9f);
                 break;
             case "Tree2":
-                tileTree2Pos = set("tmpTree2", tileRoadPos, startUpTree2PosY, treeDistance);
+                tileTree2Pos = setTmp("tmpTree2", tileTree2Pos, startUpTree2PosY, 9f);
                 break;
             case "Cloud1":
-                tileCloud1Pos = set("tmpCloud1", tileRoadPos, startUpCloud1PosY, Random.Range(1, 8));
+                tileCloud1Pos = setTmp("tmpCloud1", tileCloud1Pos, startUpCloud1PosY, 9f);
                 break;
             case "Cloud2":
-                tileCloud2Pos = set("tmpCloud2", tileRoadPos, startUpCloud2PosY, Random.Range(1, 8));
+                tileCloud2Pos = setTmp("tmpCloud2", tileCloud2Pos, startUpCloud2PosY, 9f);
                 break;
             case "Grass1":
-                tileGrass1Pos = set("tmpGrass1", tileRoadPos, startUpGrass1PosY, Random.Range(1, 8));
+                tileGrass1Pos = setTmp("tmpGrass1", tileGrass1Pos, startUpGrass1PosY, 9f);
                 break;
             case "Grass2":
-                tileGrass2Pos = set("tmpGrass2", tileRoadPos, startUpGrass2PosY, Random.Range(1, 8));
+                tileGrass2Pos = setTmp("tmpGrass2", tileGrass2Pos, startUpGrass2PosY, 9f);
                 break;
             case "TreeShadow":
-                tileTreeShadowPos = set("tmpTreeShadow", tileRoadPos, startUpTreeShadowPosY, treeDistance);
+                tileTreeShadowPos = setTmp("tmpTreeShadow", tileTreeShadowPos, startUpTreeShadowPosY, 9f);
                 break;
         }
     }
 
-    private GameObject set(string type,GameObject gameObjectType, float PosYType,float distance)
+    private GameObject setTmp(string type, GameObject gameObjectType, float PosYType, float distance)
     {
         tmpTile = collectedTiles.transform.FindChild(type).transform.GetChild(0).gameObject;
         tmpTile.transform.parent = gameLayer.transform;
@@ -227,52 +248,28 @@ public class LevelCreator : MonoBehaviour {
 
         GameObject newBottomEnemy = collectedTiles.transform.FindChild("tmpKillBottom").transform.GetChild(0).gameObject;
         newBottomEnemy.transform.parent = gameLayer.transform;
-        newBottomEnemy.transform.position = new Vector2(tileRoadPos.transform.position.x + 5.0f , startUpKillBottomPosY);
+        newBottomEnemy.transform.position = new Vector2(tileRoadPos.transform.position.x + 5.0f, startUpKillBottomPosY);
 
         GameObject newTopEnemy = collectedTiles.transform.FindChild("tmpKillTop").transform.GetChild(0).gameObject;
         newTopEnemy.transform.parent = gameLayer.transform;
         newTopEnemy.transform.position = new Vector2(tileRoadPos.transform.position.x + 5.0f, startUpKillTopPosY);
         enemyAdded = true;
+
+        GameObject newScore = collectedTiles.transform.FindChild("tmpScore").transform.GetChild(0).gameObject;
+        newScore.transform.parent = gameLayer.transform;
+        newScore.transform.position = new Vector2(tileRoadPos.transform.position.x + 5.0f, startUpScorePosY);
     }
 
-    private void randomizeBackground()
+    private void reloadScene()
     {
-        if (backgroundAdded) return;
+        Application.LoadLevel(0);
+    }
 
-        int control = (int)Random.Range(0, 4);
-        if (control == 0)
-        {
-            setTile("Tree1");setTile("Tree2");
-            setTile("Cloud1");setTile("Cloud2");
-            setTile("Grass1");setTile("Grass2");
-            setTile("TreeShadow");
-        }
-        else if (control == 1)
-        {
-            setTile("Tree1");setTile("Cloud1");
-            setTile("Grass1");setTile("Grass2");
-            setTile("TreeShadow");
-        }
-        else if (control == 2)
-        {
-            setTile("Tree2");setTile("Cloud2");
-            setTile("Grass1");setTile("Grass2");
-            setTile("TreeShadow");
-        }
-        else if (control == 3)
-        {
-            setTile("Tree1");setTile("Cloud2");
-            setTile("Grass1");setTile("Grass2");
-            setTile("TreeShadow");
-        }
-        else if (control == 4)
-        {
-            setTile("Tree2");setTile("Cloud1");
-            setTile("Grass1");setTile("Grass2");
-            setTile("TreeShadow");
-        }
-
-        backgroundAdded = true;
+    private void killPlayer()
+    {
+        if (playerDead) return;
+        playerDead = true;
+        Invoke("reloadScene", 0.4f);
     }
 
 }

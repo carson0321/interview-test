@@ -22,12 +22,12 @@ public class PandaController : MonoBehaviour {
 	void Update () {
         moveAnimation();
         //gameObject.transform.position += new Vector3(speed, 0, 0);
+        //transform.Translate(Vector3.forward * speed * Time.deltaTime);
 
         if (!inAir && Mathf.Abs(this.GetComponent<Rigidbody2D>().velocity.y) > 0.05f)  inAir = true;
         else if (inAir && this.GetComponent<Rigidbody2D>().velocity.y == 0.00f)
         {
             inAir = false;
-            //transform.Translate(Vector3.forward * speed * Time.deltaTime);
             if (jumpPress) jump();
         }
     }
