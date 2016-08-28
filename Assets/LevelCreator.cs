@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class LevelCreator : MonoBehaviour
 {
@@ -36,10 +37,13 @@ public class LevelCreator : MonoBehaviour
     private float outOfPlayBounceY;
     private int roadCounter = 0;
     private bool enemyAdded = false;
-
+    private bool isMobile = true;
     private float time = 0;
     private float gameSpeed = 3.5f;
     private bool playerDead = false;
+
+    public Text ResultScoreText;
+    public GameObject Result;
 
     void Awake()
     {
@@ -51,7 +55,7 @@ public class LevelCreator : MonoBehaviour
     {
         gameLayer = GameObject.Find("gameLayer");
         collectedTiles = GameObject.Find("tmp");
-
+        if (Application.isEditor) isMobile = false;
         for (int i = 0; i < 50; i++)
         {
             setGameObject("Road");
@@ -120,6 +124,18 @@ public class LevelCreator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (playerDead)
+        {
+            ResultScoreText.gameObject.SetActive(true);
+            Result.SetActive(true);
+            if (isMobile)
+            {
+                int tmp = Input.touchCount;
+                tmp--;
+                if (Input.GetTouch(tmp).phase == TouchPhase.Began) Application.LoadLevel("Scene0");
+            }
+            else if (Input.GetMouseButtonDown(0)) Application.LoadLevel("Scene0");
+        }
     }
 
     void FixedUpdate()
@@ -245,31 +261,25 @@ public class LevelCreator : MonoBehaviour
     private void randomizeEnemy()
     {
         if (enemyAdded) return;
-
+        int distance = (int)Random.Range(0, 2);
         GameObject newBottomEnemy = collectedTiles.transform.FindChild("tmpKillBottom").transform.GetChild(0).gameObject;
         newBottomEnemy.transform.parent = gameLayer.transform;
-        newBottomEnemy.transform.position = new Vector2(tileRoadPos.transform.position.x + 5.0f, startUpKillBottomPosY);
+        newBottomEnemy.transform.position = new Vector2(tileRoadPos.transform.position.x + 5.0f, startUpKillBottomPosY + distance);
 
         GameObject newTopEnemy = collectedTiles.transform.FindChild("tmpKillTop").transform.GetChild(0).gameObject;
         newTopEnemy.transform.parent = gameLayer.transform;
-        newTopEnemy.transform.position = new Vector2(tileRoadPos.transform.position.x + 5.0f, startUpKillTopPosY);
+        newTopEnemy.transform.position = new Vector2(tileRoadPos.transform.position.x + 5.0f, startUpKillTopPosY + distance);
         enemyAdded = true;
 
         GameObject newScore = collectedTiles.transform.FindChild("tmpScore").transform.GetChild(0).gameObject;
         newScore.transform.parent = gameLayer.transform;
-        newScore.transform.position = new Vector2(tileRoadPos.transform.position.x + 5.0f, startUpScorePosY);
-    }
-
-    private void reloadScene()
-    {
-        Application.LoadLevel(0);
+        newScore.transform.position = new Vector2(tileRoadPos.transform.position.x + 5.0f, startUpScorePosY + distance);
     }
 
     private void killPlayer()
     {
         if (playerDead) return;
         playerDead = true;
-        Invoke("reloadScene", 0.4f);
     }
 
 }

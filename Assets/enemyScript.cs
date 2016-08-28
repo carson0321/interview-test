@@ -3,10 +3,11 @@ using System.Collections;
 
 public class enemyScript : MonoBehaviour {
 
+    private PandaController _player;
     // Use this for initialization
     void Start () {
-	
-	}
+        _player = GameObject.Find("Panda").GetComponent<PandaController>();
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -19,8 +20,11 @@ public class enemyScript : MonoBehaviour {
         if (coll.gameObject.tag == "Player")
         {
             GameObject tmpPlayer = GameObject.Find("Panda");
-            tmpPlayer.GetComponent<Rigidbody2D>().AddForce(Vector2.up * 1000);
-            tmpPlayer.GetComponent<Collider2D>().enabled = false;
+            if (_player.isPlaying)
+            {
+                tmpPlayer.GetComponent<Rigidbody2D>().velocity = Vector2.up * 10;
+                tmpPlayer.GetComponent<Collider2D>().enabled = false;
+            }
         }
 
 

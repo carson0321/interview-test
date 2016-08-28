@@ -5,6 +5,8 @@ using UnityEngine.UI;
 public class ScoreHandler : MonoBehaviour {
 
     public Text ScoreText;
+    public Text ResultScoreText;
+
     private int Score = 0;
     private float displayTime = 0;
     private bool display = false;
@@ -35,6 +37,7 @@ public class ScoreHandler : MonoBehaviour {
     {
         Score += 1;
         ScoreText.text = System.Convert.ToString(Score);
+        ResultScoreText.text = "Score: " + System.Convert.ToString(Score);
         ScoreText.gameObject.SetActive(true);
         display = true;
     }
