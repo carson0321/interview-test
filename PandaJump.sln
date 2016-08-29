@@ -1,0 +1,23 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2008
+
+Project("{61084CD8-0C83-CBD8-C404-171ACC7667EA}") = "PandaJump", "Assembly-CSharp.csproj", "{26600555-8D19-B1A7-F95E-2FD0903F1A9A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{26600555-8D19-B1A7-F95E-2FD0903F1A9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26600555-8D19-B1A7-F95E-2FD0903F1A9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26600555-8D19-B1A7-F95E-2FD0903F1A9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26600555-8D19-B1A7-F95E-2FD0903F1A9A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Assembly-CSharp.csproj
+	EndGlobalSection
+EndGlobal
