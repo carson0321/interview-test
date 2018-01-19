@@ -1,0 +1,22 @@
+{
+    "extends": "eslint:recommended",
+    "parserOptions": {
+        "ecmaVersion": 2017,
+        "ecmaFeatures": {
+            "experimentalObjectRestSpread": true
+        }
+    },
+    "env": {
+        "node": true,
+        "mocha": true
+    },
+    "rules": {
+        "indent": ["error", 4, {"MemberExpression": 0, "SwitchCase": 1}],
+        "no-trailing-spaces": "error",
+        "quotes": ["error", "single", {"avoidEscape": true}],
+        "semi": ["error", "always"],
+        "comma-dangle": ["error", "always-multiline"],
+        "no-console": "off",
+        "no-unused-vars": ["error", { "argsIgnorePattern": "^err$|_ignored$", "varsIgnorePattern": "_ignored$" }]
+    }
+}
