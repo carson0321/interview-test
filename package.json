@@ -1,0 +1,12 @@
+{
+  "name": "amis-test",
+  "version": "1.0.0",
+  "description": "In this test, you will work on an in-memory blockchain. To make it extremely simple, it's a single node blockchain setup, which means no network or p2p connections to deal with. Also there is no signature or verification are necessary, so your consensus would be straightforward: just collect transactions and make them blocks.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Carson Wang",
+  "license": "MIT"
+}
