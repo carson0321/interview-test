@@ -40,7 +40,7 @@ class BlockChain {
     }
 
     create_proof_of_work(pre_proof) {
-        let proof = previous_proof + 1
+        let proof = pre_proof + 1
         while ((proof + pre_proof) % 7 != 0) {
             proof += 1;
         }
