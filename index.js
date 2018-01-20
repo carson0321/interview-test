@@ -10,17 +10,22 @@ const BlockChain = require('./BlockChain');
 const CronJob = require('cron').CronJob;
 
 const block_chain = new BlockChain();
+print_block(block_chain.get_last_block()); //genesis block
+
+function print_block(block) {
+    console.log(`Block Index: ${block.index}, Pre_Hash: ${block.pre_hash}, Hash: ${block.get_hash()}`);
+    if (block.transactions.length > 0) console.log(block.transactions);
+    console.log('------------------------------------------------------');
+}
 
 function autoGeneratesBlock() {
     const job = new CronJob({
         cronTime: '*/1 * * * * *',
         onTick: () => {
             const last_block = block_chain.get_last_block();
-            console.log(`Block Index: ${last_block.index}, Pre_Hash: ${last_block.pre_hash}, Hash: ${last_block.get_hash()}`);
-            //console.log(block_chain.chain);
             const proof = block_chain.create_proof_of_work(last_block.proof);
             block_chain.create_new_block(proof, last_block.get_hash());
-            console.log('------------------------------------------------------');
+            print_block(block_chain.get_last_block());
         },
         start: false,
         timeZone: 'Asia/Taipei',
