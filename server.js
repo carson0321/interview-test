@@ -62,7 +62,7 @@ function get_wallet(address) {
     return wallet;
 }
 
-app.post('/transactions', (req, rsp) => {
+app.post('/transaction', (req, rsp) => {
     if(!req.body || !req.body.from || !req.body.to || !req.body.value) {
         rsp.send('Must provide parameters {from,to,value}.');
     }
@@ -82,6 +82,7 @@ app.post('/transactions', (req, rsp) => {
         else {
             rsp.send('Failed transaction.');
         }
+        jsonfile.writeFileSync('wallets.json', wallet_database, {spaces: 2, EOL: '\r\n'});
     } catch (err) {
         rsp.send('Failed transaction.');
     }
@@ -91,7 +92,7 @@ app.post('/blockchain', (req, rsp) => {
     rsp.json(block_chain.chain);
 });
 
-app.post('/wallet', (req, rsp) => {
+app.post('/wallets', (req, rsp) => {
     rsp.json(wallet_database);
 });
 
