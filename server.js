@@ -68,7 +68,7 @@ app.post('/transaction', (req, rsp) => {
     }
     const from = req.body.from;
     const to = req.body.to;
-    const value = req.body.value;
+    const value = parseInt(req.body.value);
     const from_wallet = get_wallet(from);
     const to_wallet = get_wallet(to);
     try {
