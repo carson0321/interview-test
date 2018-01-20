@@ -6,6 +6,7 @@
  */
 
 const Block = require('./Block');
+const crypto = require('crypto');
 
 class BlockChain {
     constructor() {
@@ -17,7 +18,7 @@ class BlockChain {
     create_genesis_block() {
         this.create_new_block(0, 0);
     }
-    
+
     create_new_block(proof, pre_hash) {
         const block = new Block(
             this.chain.length,
@@ -31,16 +32,18 @@ class BlockChain {
     }
 
     create_new_transaction(from, to, value) {
-        this.cur_block_transactions.append({
-            'from': sender,
-            'to': recipient,
-            'value': amount
+        const hash = `${from}${to}${value}`;
+        this.cur_block_transactions.push({
+            'hash': crypto.createHash('sha256').update(hash).digest('hex'),
+            'from': from,
+            'to': to,
+            'value': value,
         });
         return this.get_last_block().index + 1;
     }
 
     create_proof_of_work(pre_proof) {
-        let proof = pre_proof + 1
+        let proof = pre_proof + 1;
         while ((proof + pre_proof) % 7 != 0) {
             proof += 1;
         }
@@ -52,4 +55,4 @@ class BlockChain {
     }
 }
 
-module.exports = BlockChain
+module.exports = BlockChain;
