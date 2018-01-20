@@ -9,10 +9,11 @@ const crypto = require('crypto');
 
 class Transaction {
     constructor(from, to, value) {
-        const hash = `${from}${to}${value}`;
         this.from = from;
         this.to = to;
         this.value = value;
+        this.timestamp = new Date().getTime();
+        const hash = `${from}${to}${value}${this.timestamp}`;
         this.hash = crypto.createHash('sha256').update(hash).digest('hex');
     }
 }

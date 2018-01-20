@@ -17,7 +17,9 @@
     "mocha": "^5.0.0"
   },
   "dependencies": {
+    "body-parser": "^1.18.2",
     "cron": "^1.3.0",
-    "express": "^4.16.2"
+    "express": "^4.16.2",
+    "jsonfile": "^4.0.0"
   }
 }
