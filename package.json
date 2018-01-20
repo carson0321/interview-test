@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test-blockchain": "mocha test/test_blockchain.js",
     "precommit": "lint-staged"
   },
   "author": "Carson Wang",
@@ -13,6 +13,7 @@
   "devDependencies": {
     "eslint": "^4.15.0",
     "husky": "^0.14.3",
-    "lint-staged": "^6.0.1"
+    "lint-staged": "^6.0.1",
+    "mocha": "^5.0.0"
   }
 }
