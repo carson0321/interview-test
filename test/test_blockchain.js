@@ -22,10 +22,10 @@ describe('Verify blockchain', () => {
         for (let i in block_chain.chain) {
             const cur_block = block_chain.chain[i];
             if(i==0) {
-                assert.equal(cur_block.pre_hash, 0)
+                assert.equal(cur_block.pre_hash, 0);
             }
             else if(i < block_number) {
-                assert.equal(block_chain.chain[i-1].get_hash(), cur_block.pre_hash)
+                assert.equal(block_chain.chain[i-1].get_hash(), cur_block.pre_hash);
             }
         }
     });
