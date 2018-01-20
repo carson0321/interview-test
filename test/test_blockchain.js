@@ -5,7 +5,7 @@
  * Created Time: 2018-01-20 18:25:33
  */
 
-const BlockChain = require('../BlockChain');
+const BlockChain = require('../server/BlockChain');
 const assert = require('assert');
 
 describe('Verify blockchain', () => {

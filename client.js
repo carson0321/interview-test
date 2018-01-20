@@ -25,7 +25,7 @@ function list(path) {
 
 function create_transaction(args) {
     client.post('http://localhost:8888/transaction', args, (data) => {
-        console.log(data.toString());
+        console.log(chalk.magenta(data.toString()));
         process.exit();
     });
 }
@@ -44,9 +44,9 @@ term.singleColumnMenu(selects , (error, response) => {
         response.selectedIndex,
         response.selectedText,
     );
-    if(parseInt(response.selectedIndex) == 0) list('blockchain');
-    else if(parseInt(response.selectedIndex) == 1) list('wallets');
-    else if(parseInt(response.selectedIndex) == 2) {
+    if(parseInt(response.selectedIndex) === 0) list('blockchain');
+    else if(parseInt(response.selectedIndex) === 1) list('wallets');
+    else if(parseInt(response.selectedIndex) === 2) {
         const args = {
             data: {},
             headers: { 'Content-Type': 'application/json' },
