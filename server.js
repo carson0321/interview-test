@@ -28,7 +28,7 @@ function print_block(block) {
 
 function autoGeneratesBlock() {
     const job = new CronJob({
-        cronTime: '*/1 * * * * *',
+        cronTime: '*/10 * * * * *',
         onTick: () => {
             const last_block = block_chain.get_last_block();
             const proof = block_chain.create_proof_of_work(last_block.proof);
@@ -53,7 +53,7 @@ app.post('/transactions', (req, rsp) => {
     const value =req.body.value;
     const transaction = new Transaction(from, to, value);
     block_chain.create_new_transaction(transaction);
-    rsp.end();
+    rsp.send('Transaction success');
 });
 
 app.post('/blockchain', (req, rsp) => {
