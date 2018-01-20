@@ -6,27 +6,26 @@
  */
 
 const BlockChain = require('./BlockChain');
-const Transaction = require('./Transaction');
-
-function freeze(time) {
-    const stop = new Date().getTime() + time;
-    while(new Date().getTime() < stop);
-}
+//const Transaction = require('./Transaction');
+const CronJob = require('cron').CronJob;
 
 const block_chain = new BlockChain();
-let index = 0;
-while(index > 5) {
-    const last_block = block_chain.get_last_block();
-    console.log(`Block Index: ${last_block.index}, Pre_Hash: ${last_block.pre_hash}, Hash: ${last_block.get_hash()}`);
-    if(index == 2) {
-        const transaction = new Transaction('alice', 'bob', 100);
-        block_chain.create_new_transaction(transaction);
-    }
-    console.log(last_block.transactions);
-    //console.log(block_chain.chain);
-    const proof = block_chain.create_proof_of_work(last_block.proof);
-    block_chain.create_new_block(proof, last_block.get_hash());
-    console.log('------------------------------------------------------');
-    index += 1;
-    freeze(3000);
+
+function autoGeneratesBlock() {
+    const job = new CronJob({
+        cronTime: '*/1 * * * * *',
+        onTick: () => {
+            const last_block = block_chain.get_last_block();
+            console.log(`Block Index: ${last_block.index}, Pre_Hash: ${last_block.pre_hash}, Hash: ${last_block.get_hash()}`);
+            //console.log(block_chain.chain);
+            const proof = block_chain.create_proof_of_work(last_block.proof);
+            block_chain.create_new_block(proof, last_block.get_hash());
+            console.log('------------------------------------------------------');
+        },
+        start: false,
+        timeZone: 'Asia/Taipei',
+    });
+    job.start();
 }
+
+autoGeneratesBlock();
