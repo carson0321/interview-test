@@ -54,7 +54,7 @@ app.post('/transaction', (req, rsp) => {
         else {
             rsp.send('Failed transaction.');
         }
-        jsonfile.writeFileSync('wallets.json', wallet_database, {spaces: 2, EOL: '\r\n'});
+        jsonfile.writeFileSync('wallets.json', wallet_database.data, json_layout);
     } catch (err) {
         rsp.send('Failed transaction.');
     }
