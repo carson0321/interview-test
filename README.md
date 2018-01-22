@@ -18,14 +18,16 @@ Without node_modules.
 │   ├── BlockChain.js
 │   ├── Transaction.js
 │   ├── Wallet.js
+│   ├── WalletDatabase.js
 │   └── server.js
 ├── test
-│   └── test_blockchain.js
+│   ├── test_blockchain.js
+│   └── test_walletdatabase.js
 └── wallets.json
 ```
 
-- blockchain.json: Dump to get all information for blockchain.
-- wallets.json: Dump to get all information for wallets.
+- blockchain.json: Dump all information for blockchain.
+- wallets.json: Dump all information for wallets.
 
 # Usages
 * First, compress files and install required modules:
@@ -56,16 +58,11 @@ npm install
 ```
 
 # Unit testing
-There is only one test case that uses previous hash to verify blockchat.
+There are some test cases.
 
-* Requirements: [Mocha](https://mochajs.org/)
+* Use previous hash to verify blockchain ```npm run test-blockchain``` or ```mocha test/test_blockchain.js```
+* Simple test wallet and transaction ```npm run test-walletdatabase``` or ```mocha test/test_walletdatabase.js```
+* Run all test cases: ```npm test``` or ```mocha test/```
 
-```bash
-npm run test-blockchain
-```
-
-or
-
-```bash
-mocha test/test_blockchain.js
-```
+# Download
+* [Google Cloud Storage]()
