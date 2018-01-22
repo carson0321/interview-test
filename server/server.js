@@ -19,33 +19,20 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 const port = 8888;
 const wallet_database = [];
-const block_chain = new BlockChain();
-print_block(block_chain.get_last_block()); //genesis block
-jsonfile.writeFileSync('blockchain.json', block_chain.chain, {spaces: 2, EOL: '\r\n'});
 
-function print_block(block) {
+const json_layout = {
+    spaces: 2,
+    EOL: '\r\n',
+};
+
+function print_block(block_chain) {
+    const block = block_chain.get_last_block();
     console.log(`Block Index: ${block.index}, Pre_Hash: ${block.pre_hash}, Hash: ${block.get_hash()}`);
     if (block.transactions.length > 0) console.log(block.transactions);
+    console.log(new Date());
     console.log('------------------------------------------------------');
+    jsonfile.writeFileSync('blockchain.json', block_chain.chain, json_layout);
 }
-
-function autoGeneratesBlock() {
-    const job = new CronJob({
-        cronTime: '*/10 * * * * *',
-        onTick: () => {
-            const last_block = block_chain.get_last_block();
-            const proof = block_chain.create_proof_of_work(last_block.proof);
-            block_chain.create_new_block(proof, last_block.get_hash());
-            print_block(block_chain.get_last_block());
-            jsonfile.writeFileSync('blockchain.json', block_chain.chain, {spaces: 2, EOL: '\r\n'});
-        },
-        start: false,
-        timeZone: 'Asia/Taipei',
-    });
-    job.start();
-}
-
-autoGeneratesBlock();
 
 function get_wallet(address) {
     const match = _.findIndex(wallet_database, (o) => {
@@ -97,3 +84,22 @@ app.post('/wallets', (req, rsp) => {
 });
 
 app.listen(port);
+
+// main code
+const block_chain = new BlockChain();
+// genesis block
+print_block(block_chain);
+const job = new CronJob({
+    cronTime: '*/10 * * * * *',
+    onTick: () => {
+        const last_block = block_chain.get_last_block();
+        const last_proof = block_chain.create_proof_of_work(last_block.proof);
+        block_chain.create_new_block(last_proof, last_block.get_hash());
+        print_block(block_chain);
+    },
+    start: false,
+    timeZone: 'Asia/Taipei',
+});
+setTimeout(() => {
+    job.start();
+}, 10*1000);
