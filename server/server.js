@@ -44,7 +44,7 @@ app.post('/transaction', (req, rsp) => {
     const from_wallet = wallet_database.get_wallet(from);
     const to_wallet = wallet_database.get_wallet(to);
     try {
-        if(from_wallet.balance > value) {
+        if(from_wallet.balance >= value) {
             from_wallet.balance -= value;
             to_wallet.balance += value;
             const transaction = new Transaction(from, to, value);
