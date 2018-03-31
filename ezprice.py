@@ -9,19 +9,21 @@
 
 from flask import Flask, abort, jsonify, make_response, request
 import json
+import hashlib
 
 app = Flask(__name__)
 
 class User:
-    def __init__(self, _id, name, email):
-        if not (_id or name or email):
-            raise ValueError('Empty id, name, email not allowed.')
-        self.id, self.name, self.email = _id, name, email
+    def __init__(self, name, email):
+        if not (name or email):
+            raise ValueError('Empty name, email not allowed.')
+        self.id = hashlib.md5((name + email).encode('utf-8')).hexdigest()
+        self.name, self.email = name, email
 
 users = [
-    json.loads(json.dumps(User('1','Hello World','0xdeadbeef@gmail.com').__dict__)),
-    json.loads(json.dumps(User('2','Carson Wang','r03944040@g.ntu.edu.tw').__dict__)),
-    json.loads(json.dumps(User('3','KaiSheng','r03944040@ntu.edu.tw').__dict__)),
+    json.loads(json.dumps(User('Hello World','0xdeadbeef@gmail.com').__dict__)),
+    json.loads(json.dumps(User('Carson Wang','r03944040@g.ntu.edu.tw').__dict__)),
+    json.loads(json.dumps(User('KaiSheng','r03944040@ntu.edu.tw').__dict__)),
 ]
 
 @app.route('/user/<user_id>', methods=['GET'])
