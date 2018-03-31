@@ -8,26 +8,20 @@
 #########################################################################
 
 from flask import Flask, abort, jsonify, make_response, request
-import functools
+import json
 
 app = Flask(__name__)
 
+class User:
+    def __init__(self, _id, name, email):
+        if not (_id or name or email):
+            raise ValueError('Empty id, name, email not allowed.')
+        self.id, self.name, self.email = _id, name, email
+
 users = [
-    {
-        'id': '1',
-        'name': 'Hello world',
-        'email': '0xdeadbeef@gmail.com'
-    },
-    {
-        'id': '2',
-        'name': 'Carson Wang',
-        'email': 'r03944040@g.ntu.edu.tw'
-    },
-    {
-        'id': '3',
-        'name': 'KaiSheng Wang',
-        'email': 'r03944040@ntu.edu.tw'
-    }
+    json.loads(json.dumps(User('1','Hello World','0xdeadbeef@gmail.com').__dict__)),
+    json.loads(json.dumps(User('2','Carson Wang','r03944040@g.ntu.edu.tw').__dict__)),
+    json.loads(json.dumps(User('3','KaiSheng','r03944040@ntu.edu.tw').__dict__)),
 ]
 
 @app.route('/user/<user_id>', methods=['GET'])
