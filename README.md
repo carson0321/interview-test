@@ -30,11 +30,20 @@ $ source env/bin/activate
 
 ### Usages
 
+
 * Test to get /user/:id
 
-* Test to post /user
+```bash
+curl -i -X GET http://127.0.0.1:5678/user/1
+```
 
+* Test to post /user
 * Test to get /user
+
+```bash
+curl -i -X GET http://127.0.0.1:5678/user
+```
 
 * Test to update user/:id
 
+P.S. You can use Postman, brower or other tools to test except curl command.
