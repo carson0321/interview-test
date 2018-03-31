@@ -11,6 +11,8 @@ Description: Design a RESTful system. There are respectively four features:
 * get /user
 * update user/:id
 
+In order to make work extremely simple, I work on in-memory user data. It's easy to implement. Hope you don't mind.
+
 ### Test environment
 
 * Ubuntu 14.04.5 LTS
@@ -34,14 +36,33 @@ $ source env/bin/activate
 * Test to get /user/:id
 
 ```bash
-curl -i -X GET http://127.0.0.1:5678/user/1
+curl -i http://127.0.0.1:5678/user/\
+93c736cbbde6d982743704cec290de50
+```
+==>
+
+```JSON
+{
+  "user": {
+    "email": "0xdeadbeef@gmail.com",
+    "id": "93c736cbbde6d982743704cec290de50",
+    "name": "Hello World"
+  }
+}
 ```
 
 * Test to post /user
+
+```bash
+curl -i -H "Content-Type: application/json" -X POST \
+-d '{"name":"Test Name1", "email": "test1@eamil"}' \
+http://127.0.0.1:5678/user
+```
+
 * Test to get /user
 
 ```bash
-curl -i -X GET http://127.0.0.1:5678/user
+curl -i http://127.0.0.1:5678/user
 ```
 
 * Test to update user/:id
