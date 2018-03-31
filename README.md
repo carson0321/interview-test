@@ -2,6 +2,23 @@
 
 Description: [trips-and-users](https://leetcode.com/problems/trips-and-users/description/)
 
+I haven't written in MySQL for a long time. I usually use mongoDB to handle data in my work. I try to think it over, and look up information online. Hope you don't mind.
+
+
+* Flowchart:
+    1. Search user who the status is cancellation
+    2. Need to filter banned user between 2013/10/01-2013/10/03
+    3. Compute cancellation rate
+
+
+```sql
+SELECT Request_at Day,
+ROUND(SUM(IF(Status != 'completed', TRUE, 0)) / SUM(*), 2) 'Cancellation Rate'
+FROM Trips WHERE (Request_at BETWEEN '2013-10-01' AND '2013-10-03') AND
+Client_Id IN (SELECT Users_Id FROM Users WHERE Banned = 'No')
+GROUP BY Request_at;
+```
+
 # Problem 2
 
 Description: Design a RESTful system. There are respectively four features:
@@ -11,7 +28,7 @@ Description: Design a RESTful system. There are respectively four features:
 * get /user
 * update user/:id
 
-In order to make work extremely simple, I work on in-memory user data. Besides, POST/PUT methods don't access multiple user data(JSON Array). Just a simple data. It's easy to implement. Hope you don't mind.
+In order to make work simple, I work on in-memory user data. Besides, POST/PUT methods doesn't access multiple user data(JSON Array). Just a simple data. It's easy to implement.
 
 ### Test environment
 
