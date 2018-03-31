@@ -11,7 +11,7 @@ Description: Design a RESTful system. There are respectively four features:
 * get /user
 * update user/:id
 
-In order to make work extremely simple, I work on in-memory user data. It's easy to implement. Hope you don't mind.
+In order to make work extremely simple, I work on in-memory user data. Besides, POST/PUT methods don't access multiple user data(JSON Array). Just a simple data. It's easy to implement. Hope you don't mind.
 
 ### Test environment
 
@@ -66,5 +66,12 @@ curl -i http://127.0.0.1:5678/user
 ```
 
 * Test to update user/:id
+
+```bash
+curl -i -H "Content-Type: application/json" -X PUT \
+-d '{"name":"Test Name1", "email": "test1@eamil"}' \
+curl -i http://127.0.0.1:5678/user/\
+93c736cbbde6d982743704cec290de50 
+```
 
 P.S. You can use Postman, brower or other tools to test except curl command.

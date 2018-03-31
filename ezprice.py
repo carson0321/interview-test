@@ -53,6 +53,21 @@ def createUser():
     users.append(serializableClass(user))
     return jsonify({'message': 'Create user successfully'}), 201
 
+@app.route('/user/<user_id>', methods=['PUT'])
+def updateUser(user_id):
+    if not request.json or not ('name' in request.json or 'email' in request.json):
+        return make_response(jsonify({'error': 'Bad Request. Must provide parameters either {name, email} using JSON schema.'}), 400)
+    exist_user = [i for i in users if i['id'] == user_id]
+    if len(exist_user) == 0:
+        return make_response(jsonify({'error': 'Bad Request. User doest not exist.'}), 400)
+    users[:] = [i for i in users if i['id'] != user_id]
+    if 'name' in request.json:
+        exist_user[0]['name'] = request.json['name']
+    if 'email' in request.json:
+        exist_user[0]['email'] = request.json['email']
+    users.append(exist_user[0])
+    return jsonify({'message': 'Update user successfully'}), 201
+
 @app.errorhandler(404)
 def notFound(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
