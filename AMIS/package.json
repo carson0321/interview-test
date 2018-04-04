@@ -1,0 +1,34 @@
+{
+  "name": "amis-test",
+  "version": "1.0.0",
+  "description": "In this test, you will work on an in-memory blockchain. To make it extremely simple, it's a single node blockchain setup, which means no network or p2p connections to deal with. Also there is no signature or verification are necessary, so your consensus would be straightforward: just collect transactions and make them blocks.",
+  "main": "client.js",
+  "scripts": {
+    "server": "node server/server.js",
+    "start": "node client.js",
+    "client": "node client.js",
+    "test-blockchain": "mocha test/test_blockchain.js",
+    "test-walletdatabase": "mocha test/test_walletdatabase.js",
+    "test": "mocha test/",
+    "precommit": "lint-staged"
+  },
+  "author": "Carson Wang",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^4.15.0",
+    "husky": "^0.14.3",
+    "lint-staged": "^6.0.1",
+    "mocha": "^5.0.0"
+  },
+  "dependencies": {
+    "async": "^2.6.0",
+    "body-parser": "^1.18.2",
+    "chalk": "^2.3.0",
+    "cron": "^1.3.0",
+    "express": "^4.16.2",
+    "jsonfile": "^4.0.0",
+    "lodash": "^4.17.4",
+    "node-rest-client": "^3.1.0",
+    "terminal-kit": "^1.14.3"
+  }
+}
